@@ -1,0 +1,30 @@
+{
+  "name": "api-railway",
+  "version": "0.0.1",
+  "description": "Api wrapper for api.railwayapi.site",
+  "main": "lib/index.js",
+  "types": "lib",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "railway-api",
+    "api",
+    "railway",
+    "api-wrapper",
+    "nodeJS"
+  ],
+  "author": "ZennoZenith",
+  "license": "ISC",
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.2",
+    "tslib": "^2.6.0"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ZennoZenith/api-railway.git"
+  }
+}
