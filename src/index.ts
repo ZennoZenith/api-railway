@@ -63,7 +63,8 @@ const prepareParams = (opts: ParamsBuilderOpts, self: Client) => {
   }
   return params
 }
-class Client {
+
+export class Client {
   #apiCalls = 0
   #apiKey: string | null
   #baseUrl: string
@@ -132,5 +133,4 @@ class Client {
     return data
   }
 }
-export { Client }
 export default Client
