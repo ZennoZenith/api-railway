@@ -21,7 +21,7 @@ type ParamsBuilderOpts = {
 
 // define how long to wait API response before throwing a timeout error
 const API_TIMEOUT = 15000
-const BASE_URL = 'api.railwayapi.site'
+const BASE_URL = 'api.railwayapi.site/api'
 const API_VRSION = 'v1'
 const DEFAULT_PROTOCOL = 'https'
 
@@ -39,7 +39,7 @@ const prepareParams = (opts: ParamsBuilderOpts, self: Client) => {
   params.json = true
   params.resolveWithFullResponse = true
 
-  params.url = `${self.protocol}://${self.baseUrl}`
+  params.url = `${self.protocol}://${self.baseUrl}/${self.apiVersion}`
   if (params.path) {
     params.url = `${params.url}/${params.path}`
   }
@@ -56,7 +56,7 @@ const prepareParams = (opts: ParamsBuilderOpts, self: Client) => {
     }
   }
   params.url = params.url + tempArr.join('&')
-  
+
   params.timeout = self.apiTimeout
   params.headers = {
     apiKey: self.apiKey,
