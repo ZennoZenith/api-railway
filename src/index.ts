@@ -1,8 +1,22 @@
-import Schedules from './schedules'
-import Stations from './stations'
-import Trains from './trains'
-import Misc from './misc'
+import { ErrorObj } from './types'
+import Schedules, { ScheduleInfo, ScheduleRow } from './schedules'
+import Stations, { StationGeneralInfo, StationInfo } from './stations'
+import Trains, { TrainGeneralInfo, TrainInfo } from './trains'
+import Misc, { State, TrainType, Zone } from './misc'
 import { LooseObject } from './types'
+
+export {
+  ErrorObj,
+  ScheduleInfo,
+  ScheduleRow,
+  State,
+  StationGeneralInfo,
+  StationInfo,
+  TrainGeneralInfo,
+  TrainInfo,
+  TrainType,
+  Zone
+}
 
 type Options = {
   API_VERSION?: string
@@ -18,6 +32,19 @@ type ParamsBuilderOpts = {
   params?: string
   query?: Record<string, string | number>
 }
+
+export type ApiRetrunType<T, U = ErrorObj> = {
+  httpStatusCode: number;
+  httpStatusText: string;
+  responseType: ResponseType;
+  ok: boolean;
+  url: string;
+  responseHeaders: Headers;
+  data: T[] | undefined;
+  errors: U[] | undefined;
+}
+
+
 
 // define how long to wait API response before throwing a timeout error
 const API_TIMEOUT = 15000
@@ -120,15 +147,15 @@ export class Client {
       this.#apiCalls++
     }
 
-    const data = {
+    const data: ApiRetrunType<T, U> = {
       httpStatusCode: res.status,
       httpStatusText: res.statusText,
       responseType: res.type,
       ok: res.ok,
       url: res.url,
       responseHeaders: res.headers,
-      data: json.data as T | undefined,
-      errors: json.errors as U | undefined,
+      data: json.data as T[] | undefined,
+      errors: json.errors as U[] | undefined,
     }
     return data
   }
