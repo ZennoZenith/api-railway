@@ -2,21 +2,22 @@ import { ErrorObj } from './types'
 import Schedules, { ScheduleInfo, ScheduleRow } from './schedules'
 import Stations, { StationGeneralInfo, StationInfo } from './stations'
 import Trains, { TrainGeneralInfo, TrainInfo } from './trains'
+import TrainsBtwStations, { TrainsBtwStationsType } from './trainsBtwStations'
 import Misc, { State, TrainType, Zone } from './misc'
 import { LooseObject } from './types'
 
-export {
-  ErrorObj,
-  ScheduleInfo,
-  ScheduleRow,
-  State,
-  StationGeneralInfo,
-  StationInfo,
-  TrainGeneralInfo,
-  TrainInfo,
-  TrainType,
-  Zone
-}
+type ApiRetrunDataType =
+  | ErrorObj
+  | ScheduleInfo
+  | ScheduleRow
+  | State
+  | StationGeneralInfo
+  | StationInfo
+  | TrainGeneralInfo
+  | TrainInfo
+  | TrainsBtwStationsType
+  | TrainType
+  | Zone
 
 type Options = {
   API_VERSION?: string
@@ -30,21 +31,20 @@ type ParamsBuilderOpts = {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
   path?: string
   params?: string
-  query?: Record<string, string | number>
+  query?: Record<string, string | number | undefined>
 }
 
-export type ApiRetrunType<T, U = ErrorObj> = {
-  httpStatusCode: number;
-  httpStatusText: string;
-  responseType: ResponseType;
-  ok: boolean;
-  url: string;
-  responseHeaders: Headers;
-  data: T[] | undefined;
-  errors: U[] | undefined;
+export type ApiRetrunType<T = ApiRetrunDataType, U = ErrorObj, V = {}> = {
+  httpStatusCode: number
+  httpStatusText: string
+  responseType: ResponseType
+  ok: boolean
+  url: string
+  responseHeaders: Headers
+  data: T[]
+  errors: U[]
+  extra?: V
 }
-
-
 
 // define how long to wait API response before throwing a timeout error
 const API_TIMEOUT = 15000
@@ -56,6 +56,7 @@ function setInstances(client: Client) {
   client.trains = new Trains(client)
   client.stations = new Stations(client)
   client.schedules = new Schedules(client)
+  client.trainsBtwStations = new TrainsBtwStations(client)
   client.misc = new Misc(client)
 }
 
@@ -102,6 +103,7 @@ export class Client {
   stations!: Stations
   schedules!: Schedules
   misc!: Misc
+  trainsBtwStations!: TrainsBtwStations
 
   constructor(options: Options = {}) {
     this.#apiKey = options.API_KEY || null
@@ -135,7 +137,9 @@ export class Client {
   //   return this.#apiKey
   // }
 
-  async apiRequest<T, U>(opts: ParamsBuilderOpts) {
+  async apiRequest<T = ApiRetrunDataType, U = ErrorObj, V = {}>(
+    opts: ParamsBuilderOpts,
+  ) {
     const params = prepareParams(opts, this)
     const res = await fetch(params.url, {
       method: params.method,
@@ -147,17 +151,35 @@ export class Client {
       this.#apiCalls++
     }
 
-    const data: ApiRetrunType<T, U> = {
+    const data: ApiRetrunType<T, U, V> = {
       httpStatusCode: res.status,
       httpStatusText: res.statusText,
       responseType: res.type,
       ok: res.ok,
       url: res.url,
       responseHeaders: res.headers,
-      data: json.data as T[] | undefined,
-      errors: json.errors as U[] | undefined,
+      data: res.ok ? json.data as T[] : [] as T[],
+      extra: res.ok ? json.extra as V : {} as V,
+      errors: !res.ok ? json.errors as U[] : [] as U[],
     }
+
     return data
   }
 }
+
+export {
+  ApiRetrunDataType,
+  ErrorObj,
+  ScheduleInfo,
+  ScheduleRow,
+  State,
+  StationGeneralInfo,
+  StationInfo,
+  TrainGeneralInfo,
+  TrainInfo,
+  TrainsBtwStationsType,
+  TrainType,
+  Zone,
+}
+
 export default Client

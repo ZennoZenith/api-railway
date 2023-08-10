@@ -22,10 +22,10 @@ export type TrainInfo = {
   numberOfStops: number
   trainType: string
   distance: number
-  availableClasses: string
+  availableClasses: string[]
   hasPantry: boolean
   returnTrainNumber: string
-  updatedAt: Date
+  updatedAt: string
 }
 
 export type TrainGeneralInfo = {

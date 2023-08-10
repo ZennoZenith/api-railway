@@ -1,6 +1,6 @@
 {
   "name": "api-railway",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Api wrapper for api.railwayapi.site",
   "main": "./lib/cjs/index.js",
   "types": "./lib/cjs/types/index.d.ts",
@@ -21,8 +21,9 @@
   ],
   "scripts": {
     "clean": "rm -rf ./lib",
+    "build": "npm run build:linux",
     "build:linux": "npm run clean && npm run build:esm && npm run build:cjs",
-    "build": "npm run build:esm:windows && npm run build:cjs",
+    "build:windows": "npm run build:esm:windows && npm run build:cjs",
     "build:esm": "tsc -p ./configs/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
     "build:esm:windows": "tsc -p ./configs/tsconfig.esm.json && move lib\\esm\\index.js lib\\esm\\index.mjs",
     "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
