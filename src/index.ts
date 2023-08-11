@@ -2,7 +2,10 @@ import { ErrorObj } from './types'
 import Schedules, { ScheduleInfo, ScheduleRow } from './schedules'
 import Stations, { StationGeneralInfo, StationInfo } from './stations'
 import Trains, { TrainGeneralInfo, TrainInfo } from './trains'
-import TrainsBtwStations, { TrainsBtwStationsType } from './trainsBtwStations'
+import TrainsBtwStations, {
+  TrainsBtwStationsExtraType,
+  TrainsBtwStationsType,
+} from './trainsBtwStations'
 import Misc, { State, TrainType, Zone } from './misc'
 import { LooseObject } from './types'
 
@@ -177,6 +180,7 @@ export {
   StationInfo,
   TrainGeneralInfo,
   TrainInfo,
+  TrainsBtwStationsExtraType,
   TrainsBtwStationsType,
   TrainType,
   Zone,
