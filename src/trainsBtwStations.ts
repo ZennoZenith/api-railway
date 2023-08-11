@@ -45,7 +45,7 @@ export type TrainsBtwStationsType = {
   hasPantry: boolean
   trainType: string
   returnTrainNumber: string
-  stationForm: StationStop
+  stationFrom: StationStop
   stationTo: StationStop
   updatedAt: string
   distance: number
