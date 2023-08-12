@@ -1,5 +1,5 @@
 import Client from './index'
-import { ErrorObj } from './types'
+import { ErrorObj, TrainRunsOnType } from './types'
 
 export type TrainInfo = {
   id: number
@@ -10,15 +10,7 @@ export type TrainInfo = {
   departureTime: string
   arrivalTime: string
   duration: string
-  trainRunsOn: {
-    trainRunsOnSun: 'Y' | 'N'
-    trainRunsOnMon: 'Y' | 'N'
-    trainRunsOnTue: 'Y' | 'N'
-    trainRunsOnWed: 'Y' | 'N'
-    trainRunsOnThu: 'Y' | 'N'
-    trainRunsOnFri: 'Y' | 'N'
-    trainRunsOnSat: 'Y' | 'N'
-  }
+  trainRunsOn: TrainRunsOnType
   numberOfStops: number
   trainType: string
   distance: number

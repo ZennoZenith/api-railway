@@ -1,4 +1,4 @@
-import { ErrorObj } from './types'
+import { ErrorObj, TrainRunsOnDays, TrainRunsOnType } from './types'
 import Schedules, { ScheduleInfo, ScheduleRow } from './schedules'
 import Stations, { StationGeneralInfo, StationInfo } from './stations'
 import Trains, { TrainGeneralInfo, TrainInfo } from './trains'
@@ -46,6 +46,7 @@ export type ApiRetrunType<T = ApiRetrunDataType, U = ErrorObj, V = {}> = {
   responseHeaders: Headers
   data: T[]
   errors: U[]
+  raw: any
   extra?: V
 }
 
@@ -164,6 +165,7 @@ export class Client {
       data: res.ok ? json.data as T[] : [] as T[],
       extra: res.ok ? json.extra as V : {} as V,
       errors: !res.ok ? json.errors as U[] : [] as U[],
+      raw: json,
     }
 
     return data
@@ -180,6 +182,8 @@ export {
   StationInfo,
   TrainGeneralInfo,
   TrainInfo,
+  TrainRunsOnDays,
+  TrainRunsOnType,
   TrainsBtwStationsExtraType,
   TrainsBtwStationsType,
   TrainType,

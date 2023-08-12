@@ -1,10 +1,10 @@
 import Client from './index'
-import { ErrorObj } from './types'
+import { ErrorObj, TrainRunsOnType } from './types'
 
 type StationStop = {
   id: number
   srNo: string
-  arrivalTime: number | null
+  arrivalTime: string | null
   departureTime: string | null
   haltTime: string | null
   platform: string | null
@@ -32,15 +32,7 @@ export type TrainsBtwStationsType = {
   trainNumber: string
   trainName: string
   trainFullName: string
-  trainRunsOn: {
-    trainRunsOnSun: 'Y' | 'N'
-    trainRunsOnMon: 'Y' | 'N'
-    trainRunsOnTue: 'Y' | 'N'
-    trainRunsOnWed: 'Y' | 'N'
-    trainRunsOnThu: 'Y' | 'N'
-    trainRunsOnFri: 'Y' | 'N'
-    trainRunsOnSat: 'Y' | 'N'
-  }
+  trainRunsOn: TrainRunsOnType
   availableClasses: string[]
   hasPantry: boolean
   trainType: string
