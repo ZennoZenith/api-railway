@@ -5,6 +5,7 @@ export type TrainInfo = {
   id: number
   trainNumber: string
   trainName: string
+  trainFullName: string
   stationFrom: { stationCode: string; id: number; stationName: string }
   stationTo: { stationCode: string; id: number; stationName: string }
   departureTime: string
