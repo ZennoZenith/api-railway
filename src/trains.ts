@@ -13,9 +13,10 @@ export type TrainInfo = {
   duration: string
   trainRunsOn: TrainRunsOnType
   numberOfStops: number
-  trainType: string
+  trainTypeCode: string
   distance: number
   availableClasses: string[]
+  avgSpeed: number
   hasPantry: boolean
   returnTrainNumber: string
   updatedAt: string

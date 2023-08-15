@@ -37,15 +37,19 @@ type ParamsBuilderOpts = {
   query?: Record<string, string | number | undefined>
 }
 
-export type ApiRetrunType<T = ApiRetrunDataType, U = ErrorObj, V = {}> = {
+export type ApiRetrunType<
+  T extends ApiRetrunDataType,
+  U extends ErrorObj = ErrorObj,
+  V = {},
+> = {
   httpStatusCode: number
   httpStatusText: string
   responseType: ResponseType
   ok: boolean
   url: string
   responseHeaders: Headers
-  data: T[]
-  errors: U[]
+  data: T[] | undefined
+  errors: U[] | undefined
   raw: any
   extra?: V
 }
@@ -141,7 +145,11 @@ export class Client {
   //   return this.#apiKey
   // }
 
-  async apiRequest<T = ApiRetrunDataType, U = ErrorObj, V = {}>(
+  async apiRequest<
+    T extends ApiRetrunDataType,
+    U extends ErrorObj = ErrorObj,
+    V = {},
+  >(
     opts: ParamsBuilderOpts,
   ) {
     const params = prepareParams(opts, this)
@@ -160,11 +168,13 @@ export class Client {
       httpStatusText: res.statusText,
       responseType: res.type,
       ok: res.ok,
+      // ok: function(data): data is T[] ,
       url: res.url,
       responseHeaders: res.headers,
-      data: res.ok ? json.data as T[] : [] as T[],
+      // data: res.ok ? json.data as T[] : [] as T[],
+      data: json.data,
       extra: res.ok ? json.extra as V : {} as V,
-      errors: !res.ok ? json.errors as U[] : [] as U[],
+      errors: json.errors,
       raw: json,
     }
 
@@ -188,6 +198,17 @@ export {
   TrainsBtwStationsType,
   TrainType,
   Zone,
+}
+
+export function isOk<T extends ApiRetrunDataType>(
+  apiResponse: ApiRetrunType<T>,
+): apiResponse is ApiRetrunType<T> & { data: T[]; errors: undefined } {
+  return apiResponse.ok === true
+}
+export function isError<T extends ApiRetrunDataType, U extends ErrorObj>(
+  apiResponse: ApiRetrunType<T, U>,
+): apiResponse is ApiRetrunType<T, U> & { data: undefined; errors: U[] } {
+  return apiResponse.ok === true
 }
 
 export default Client
