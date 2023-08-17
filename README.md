@@ -4,8 +4,8 @@ This is an official [NPM](https://www.npmjs.com/package/api-railway) package tha
 
 An example project using this package can be found on [Railway Frontend Demo](https://github.com/ZennoZenith/RailwayFrontendVue)
 
-<div> <img src="images/example-1.png" alt="Example 1"> </div> 
-<div> <img src="images/example-1.png" alt="Example 2"> </div>
+![Example 1](./images/example-1.png)
+![Example 2](./images/example-2.png)
 
 ## Installation
 
