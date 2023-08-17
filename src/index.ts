@@ -10,7 +10,6 @@ import Misc, { State, TrainType, Zone } from './misc'
 import { LooseObject } from './types'
 
 type ApiRetrunDataType =
-  | ErrorObj
   | ScheduleInfo
   | ScheduleRow
   | State
