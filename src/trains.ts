@@ -43,6 +43,7 @@ export default class Trains {
   }
 
   async getTrainsGeneral(q: string, limit: number = 10) {
+    console.log()
     return await this.#client.apiRequest<TrainGeneralInfo, ErrorObj>({
       method: 'GET',
       path: 'trains',
