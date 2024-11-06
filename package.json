@@ -13,12 +13,14 @@
   "bugs": {
     "url": "https://github.com/ZennoZenith/api-railway/issues"
   },
-  "author": "ZennoZenith <> (https://zennozenith.com)",
+  "author": "ZennoZenith (https://zennozenith.com)",
   "repository": {
     "type": "git",
     "url": "git://github.com/ZennoZenith/api-railway.git"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "type": "module",
   "license": "MIT",
@@ -28,5 +30,6 @@
   "scripts": {
     "build": "tsc",
     "ci": "bun run build"
-  }
+  },
+  "types": "./dist/index.d.ts"
 }
