@@ -2,6 +2,7 @@ import { Client } from "./index.js";
 import type {
   ApiError,
   ApiResponse,
+  StationCode,
   StationType,
   TimeString,
   TrainClassTypeXX,
@@ -24,13 +25,13 @@ export type TrainInfo = {
   returnTrainNumber: string;
   stationFrom: {
     id: number;
-    stationCode: string;
+    stationCode: StationCode;
     stationName: string;
     stationType: StationType;
   };
   stationTo: {
     id: number;
-    stationCode: string;
+    stationCode: StationCode;
     stationName: string;
     stationType: StationType;
   };
@@ -62,7 +63,7 @@ export default class Trains {
     this.urlBuilder = new URLBuilder<"trains">(this.baseUrl).addResource("trains");
   }
 
-  async getTrains(trainNumber: TrainNumber): Promise<ApiResponse<TrainInfo>> {
+  async getTrain(trainNumber: TrainNumber): Promise<ApiResponse<TrainInfo>> {
     let response = await catchError(
       this.urlBuilder.addResource(trainNumber).fetch({
         headers: {
@@ -94,6 +95,35 @@ export default class Trains {
   ): Promise<ApiResponse<TrainGeneralInfo>> {
     let response = await catchError(
       this.urlBuilder.addQueryParam({ trainNumber, limit }).fetch({
+        headers: {
+          "x-api-key": this.#client.apiKey,
+        },
+        method: "GET",
+      }),
+    );
+
+    if (response[0]) {
+      return { error: response[0], data: undefined };
+    }
+
+    const data = await catchError<TrainGeneralInfo | ApiError>(response[1].json());
+    if (data[0]) {
+      return { error: data[0], data: undefined };
+    }
+
+    if ((data[1] as ApiError).error) {
+      return { apiError: data[0], data: undefined };
+    }
+
+    return { data: data[1] as TrainGeneralInfo, apiError: undefined, error: undefined };
+  }
+
+  async getTrainsLikeQuery(
+    q: string,
+    limit: number = 10,
+  ): Promise<ApiResponse<TrainGeneralInfo>> {
+    let response = await catchError(
+      this.urlBuilder.addQueryParam({ q, limit }).fetch({
         headers: {
           "x-api-key": this.#client.apiKey,
         },

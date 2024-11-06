@@ -26,13 +26,12 @@ export type ApiResponse<T> = {
   data: T;
 };
 
-// export type TrainRunsOnType = Record<TrainRunsOnDays, boolean>;
-
 export interface LooseObject {
   [key: string]: any;
 }
 
 export type TrainNumber = string;
+export type StationCode = string;
 export type TimeString = string;
 export type TrainTime = `${string}:${string}:${string}`;
 export type StationType = [

@@ -1,15 +1,16 @@
+import Stations from "./stations.js";
 import Trains from "./trains.js";
-import type { TrainNumber } from "./types.js";
+import type { StationCode, TrainNumber } from "./types.js";
 
 interface APIAttributes {
   trains: { trainNumber: string; limit?: number } | { q: string; limit?: number };
-  stations: { id: number; name?: string };
+  stations: { stationCode: string; limit?: number } | { q: string; limit?: number };
 }
 type API = keyof APIAttributes;
 
 interface SegmentTypes {
   trains: "trains" | TrainNumber;
-  stations: "stations";
+  stations: "stations" | StationCode;
 }
 
 interface FetchOptions {
@@ -111,10 +112,10 @@ export class Client {
   readonly apiTimeout: number;
   readonly protocol: "http" | "https";
   readonly trains: Trains;
-  // stations: Stations;
-  // schedules: Schedules;
-  // misc: Misc;
-  // trainsBtwStations!: TrainsBtwStations;
+  readonly stations: Stations;
+  // readonly schedules: Schedules;
+  // readonly misc: Misc;
+  // readonly trainsBtwStations!: TrainsBtwStations;
 
   constructor(options: Options = {}) {
     this.apiKey = options.API_KEY || null;
@@ -123,7 +124,7 @@ export class Client {
     this.apiTimeout = options.API_TIMEOUT || API_TIMEOUT;
     this.protocol = options.PROTOCOL || DEFAULT_PROTOCOL;
     this.trains = new Trains(this);
-    // client.stations = new Stations(client);
+    this.stations = new Stations(this);
     // client.schedules = new Schedules(client);
     // client.trainsBtwStations = new TrainsBtwStations(client);
     // client.misc = new Misc(client);
