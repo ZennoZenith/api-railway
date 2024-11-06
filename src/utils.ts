@@ -1,16 +1,26 @@
+import HealthCheck from "./health_check.js";
+import Schedules from "./schedules.js";
 import Stations from "./stations.js";
 import Trains from "./trains.js";
+import TrainsBtwStations from "./trainsBtwStations.js";
 import type { StationCode, TrainNumber } from "./types.js";
 
 interface APIAttributes {
-  trains: { trainNumber: string; limit?: number } | { q: string; limit?: number };
-  stations: { stationCode: string; limit?: number } | { q: string; limit?: number };
+  trains: { trainNumber: TrainNumber; limit?: number } | { q: string; limit?: number };
+  stations: { stationCode: StationCode; limit?: number } | { q: string; limit?: number };
+  schedules: { fullSchedule?: boolean };
+  trainsBtwStations: { fromStation: StationCode; toStation: StationCode; date?: string; allTrains?: boolean };
+  healthCheck: {};
 }
+
 type API = keyof APIAttributes;
 
 interface SegmentTypes {
+  healthCheck: "health_check";
   trains: "trains" | TrainNumber;
   stations: "stations" | StationCode;
+  schedules: "schedules" | TrainNumber;
+  trainsBtwStations: "trainsBtwStations";
 }
 
 interface FetchOptions {
@@ -113,9 +123,9 @@ export class Client {
   readonly protocol: "http" | "https";
   readonly trains: Trains;
   readonly stations: Stations;
-  // readonly schedules: Schedules;
-  // readonly misc: Misc;
-  // readonly trainsBtwStations!: TrainsBtwStations;
+  readonly schedules: Schedules;
+  readonly trainsBtwStations!: TrainsBtwStations;
+  readonly healthCheck: HealthCheck;
 
   constructor(options: Options = {}) {
     this.apiKey = options.API_KEY || null;
@@ -123,11 +133,11 @@ export class Client {
     this.apiVersion = options.API_VERSION || API_VRSION;
     this.apiTimeout = options.API_TIMEOUT || API_TIMEOUT;
     this.protocol = options.PROTOCOL || DEFAULT_PROTOCOL;
+    this.healthCheck = new HealthCheck(this);
     this.trains = new Trains(this);
     this.stations = new Stations(this);
-    // client.schedules = new Schedules(client);
-    // client.trainsBtwStations = new TrainsBtwStations(client);
-    // client.misc = new Misc(client);
+    this.schedules = new Schedules(this);
+    this.trainsBtwStations = new TrainsBtwStations(this);
   }
 
   get apiCalls() {
