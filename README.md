@@ -21,15 +21,15 @@ Import the module and create a new client.
 You can pass different base URL, API version, protocol if you want to use different server.
 
 ```ts
-import Client from 'api-railway'
+import Client from "api-railway";
 
-const client1 = new Client()
+const client1 = new Client();
 
 const client2 = new Client({
-  BASE_URL: 'example.com',
-  API_VRSION: 'v1',
-  DEFAULT_PROTOCOL: 'https',
-})
+  BASE_URL: "example.com",
+  API_VRSION: "v1",
+  DEFAULT_PROTOCOL: "https",
+});
 ```
 
 Every REST method returns a Promise, making this library [async await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) ready. Following examples will use the `await` form.
@@ -37,18 +37,22 @@ Every REST method returns a Promise, making this library [async await](https://d
 Each REST endpoint returns an object with type `ApiReturnType`
 
 ```ts
-type ApiRetrunType<T extends ApiRetrunDataType, U extends ErrorObj = ErrorObj, V = {}> = {
-  httpStatusCode: number
-  httpStatusText: string
-  responseType: ResponseType
-  ok: boolean
-  url: string
-  responseHeaders: Headers
-  data: T[] | undefined
-  errors: U[] | undefined
-  raw: any
-  extra?: V
-}
+type ApiRetrunType<
+  T extends ApiRetrunDataType,
+  U extends ErrorObj = ErrorObj,
+  V = {},
+> = {
+  httpStatusCode: number;
+  httpStatusText: string;
+  responseType: ResponseType;
+  ok: boolean;
+  url: string;
+  responseHeaders: Headers;
+  data: T[] | undefined;
+  errors: U[] | undefined;
+  raw: any;
+  extra?: V;
+};
 ```
 
 where `ApiRetrunDataType` is defined as
@@ -64,22 +68,22 @@ type ApiRetrunDataType =
   | TrainInfo
   | TrainsBtwStationsType
   | TrainType
-  | Zone
+  | Zone;
 ```
 
 and `ErrorObj` is defined as
 
 ```ts
 type ErrorObj = {
-  httpCode: number
-  type: string
-  code: string
-  title: string
-  description: string
-  href: string
-  path: string
-  [key: string]: any
-}
+  httpCode: number;
+  type: string;
+  code: string;
+  title: string;
+  description: string;
+  href: string;
+  path: string;
+  [key: string]: any;
+};
 ```
 
 ## Table of Contents
@@ -114,38 +118,38 @@ type ErrorObj = {
 Return type
 
 ```ts
-ApiRetrunType<TrainInfo, ErrorObj>
+ApiRetrunType<TrainInfo, ErrorObj>;
 ```
 
 Where `TrainInfo` is
 
 ```ts
 type TrainInfo = {
-  id: number
-  trainNumber: string
-  trainName: string
-  trainFullName: string
-  stationFrom: { stationCode: string; id: number; stationName: string }
-  stationTo: { stationCode: string; id: number; stationName: string }
-  departureTime: string
-  arrivalTime: string
-  duration: string
-  trainRunsOn: TrainRunsOnType
-  numberOfStops: number
-  trainTypeCode: string
-  distance: number
-  availableClasses: string[]
-  avgSpeed: number
-  hasPantry: boolean
-  returnTrainNumber: string
-  updatedAt: string
-}
+  id: number;
+  trainNumber: string;
+  trainName: string;
+  trainFullName: string;
+  stationFrom: { stationCode: string; id: number; stationName: string };
+  stationTo: { stationCode: string; id: number; stationName: string };
+  departureTime: string;
+  arrivalTime: string;
+  duration: string;
+  trainRunsOn: TrainRunsOnType;
+  numberOfStops: number;
+  trainTypeCode: string;
+  distance: number;
+  availableClasses: string[];
+  avgSpeed: number;
+  hasPantry: boolean;
+  returnTrainNumber: string;
+  updatedAt: string;
+};
 ```
 
 Example:
 
 ```ts
-const response = await client.trains.getTrains('12279')
+const response = await client.trains.getTrains("12279");
 ```
 
 #### Get list of train
@@ -158,24 +162,24 @@ const response = await client.trains.getTrains('12279')
 Return type
 
 ```ts
-ApiRetrunType<TrainGeneralInfo, ErrorObj>
+ApiRetrunType<TrainGeneralInfo, ErrorObj>;
 ```
 
 Where `TrainGeneralInfo` is
 
 ```ts
 export type TrainGeneralInfo = {
-  id: number
-  trainNumber: string
-  trainName: string
-}
+  id: number;
+  trainNumber: string;
+  trainName: string;
+};
 ```
 
 Example:
 
 ```ts
-const response1 = await client.trains.getTrainsGeneral('122')
-const response2 = await client.trains.getTrainsGeneral('122', 20)
+const response1 = await client.trains.getTrainsGeneral("122");
+const response2 = await client.trains.getTrainsGeneral("122", 20);
 ```
 
 ### Schedule
@@ -187,32 +191,32 @@ const response2 = await client.trains.getTrainsGeneral('122', 20)
 Return type
 
 ```ts
-ApiRetrunType<ScheduleInfo, ErrorObj>
+ApiRetrunType<ScheduleInfo, ErrorObj>;
 ```
 
 Where `ScheduleInfo` is
 
 ```ts
 type ScheduleRow = {
-  srNo: string
-  stationId: number
-  stationName: string
-  stationCode: string
-  arrivalTime: number | null
-  departureTime: string | null
-  distance: string
-  haltTime: string | null
-  dayCount: number
-  platform: string | null
-  boardingDisabled: boolean
-  speed: string
-}
+  srNo: string;
+  stationId: number;
+  stationName: string;
+  stationCode: string;
+  arrivalTime: number | null;
+  departureTime: string | null;
+  distance: string;
+  haltTime: string | null;
+  dayCount: number;
+  platform: string | null;
+  boardingDisabled: boolean;
+  speed: string;
+};
 ```
 
 Example:
 
 ```ts
-const response = await client.schedules.getSchedules('12279')
+const response = await client.schedules.getSchedules("12279");
 ```
 
 ### Stations
@@ -226,31 +230,31 @@ const response = await client.schedules.getSchedules('12279')
 Return type
 
 ```ts
-ApiRetrunType<StationInfo, ErrorObj>
+ApiRetrunType<StationInfo, ErrorObj>;
 ```
 
 Where `StationInfo` is
 
 ```ts
 type StationInfo = {
-  id: number
-  stationCode: string
-  stationName: string
-  stateName: string
-  stationType: string
-  numberOfPlatforms: number
-  hindiStationName: string
-  zones: { zoneName: string; zoneCode: string }
-  latitude: string
-  longitude: string
-  updatedAt: string
-}
+  id: number;
+  stationCode: string;
+  stationName: string;
+  stateName: string;
+  stationType: string;
+  numberOfPlatforms: number;
+  hindiStationName: string;
+  zones: { zoneName: string; zoneCode: string };
+  latitude: string;
+  longitude: string;
+  updatedAt: string;
+};
 ```
 
 Example:
 
 ```ts
-const response = await client.stations.getStations('NZM')
+const response = await client.stations.getStations("NZM");
 ```
 
 #### Get station list
@@ -263,23 +267,23 @@ const response = await client.stations.getStations('NZM')
 Return type
 
 ```ts
-ApiRetrunType<StationGeneralInfo, ErrorObj>
+ApiRetrunType<StationGeneralInfo, ErrorObj>;
 ```
 
 Where `StationGeneralInfo` is
 
 ```ts
 type StationGeneralInfo = {
-  id: number
-  stationCode: string
-  stationName: string
-}
+  id: number;
+  stationCode: string;
+  stationName: string;
+};
 ```
 
 Example:
 
 ```ts
-const response = await client.stations.getStationsGeneral('N')
+const response = await client.stations.getStationsGeneral("N");
 ```
 
 ### Trains-between-stations
@@ -293,46 +297,49 @@ const response = await client.stations.getStationsGeneral('N')
 Return type
 
 ```ts
-ApiRetrunType<TrainsBtwStationsType, ErrorObj, TrainsBtwStationsExtraType>
+ApiRetrunType<TrainsBtwStationsType, ErrorObj, TrainsBtwStationsExtraType>;
 ```
 
 Where `TrainsBtwStationsType`, `TrainsBtwStationsExtraType`, and `StationInfo` is
 
 ```ts
 type TrainsBtwStationsType = {
-  id: number
-  trainNumber: string
-  trainName: string
-  trainFullName: string
-  trainRunsOn: TrainRunsOnType
-  availableClasses: string[]
-  hasPantry: boolean
-  trainType: string
-  returnTrainNumber: string
-  stationFrom: StationStop
-  stationTo: StationStop
-  updatedAt: string
-  distance: number
-  duration: string
-}
+  id: number;
+  trainNumber: string;
+  trainName: string;
+  trainFullName: string;
+  trainRunsOn: TrainRunsOnType;
+  availableClasses: string[];
+  hasPantry: boolean;
+  trainType: string;
+  returnTrainNumber: string;
+  stationFrom: StationStop;
+  stationTo: StationStop;
+  updatedAt: string;
+  distance: number;
+  duration: string;
+};
 
 type TrainsBtwStationsExtraType = {
-  stationsInfo: StationInfo[]
-}
+  stationsInfo: StationInfo[];
+};
 
 type StationInfo = {
-  id: number
-  stationCode: string
-  stationName: string
-  stateName: string
-  zoneCode: string
-  stationType: string
-  hindiStationName: string
-}
+  id: number;
+  stationCode: string;
+  stationName: string;
+  stateName: string;
+  zoneCode: string;
+  stationType: string;
+  hindiStationName: string;
+};
 ```
 
 Example:
 
 ```ts
-const response = await client.trainsBtwStations.getTrainsBtweenStations('NZM', 'GWL')
+const response = await client.trainsBtwStations.getTrainsBtweenStations(
+  "NZM",
+  "GWL",
+);
 ```

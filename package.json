@@ -1,34 +1,7 @@
 {
   "name": "api-railway",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha.1",
   "description": "Api wrapper for api.railwayapi.site",
-  "main": "./lib/cjs/index.js",
-  "types": "./lib/cjs/types/index.d.ts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./lib/esm/types/index.d.ts",
-        "default": "./lib/esm/index.mjs"
-      },
-      "require": {
-        "types": "./lib/cjs/types/index.d.ts",
-        "default": "./lib/cjs/index.js"
-      }
-    }
-  },
-  "files": [
-    "lib/**/*"
-  ],
-  "scripts": {
-    "clean": "rm -rf ./lib",
-    "build": "npm run build:linux",
-    "build:linux": "npm run clean && npm run build:esm && npm run build:cjs",
-    "build:windows": "npm run build:esm:windows && npm run build:cjs",
-    "build:esm": "tsc -p ./configs/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
-    "build:esm:windows": "tsc -p ./configs/tsconfig.esm.json && move lib\\esm\\index.js lib\\esm\\index.mjs",
-    "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
-    "prepack": "npm run build"
-  },
   "keywords": [
     "railway-api",
     "api",
@@ -36,17 +9,24 @@
     "api-wrapper",
     "nodeJS"
   ],
-  "author": "ZennoZenith",
-  "license": "ISC",
-  "devDependencies": {
-    "@tsconfig/recommended": "^1.0.2",
-    "tslib": "^2.6.0"
+  "homepage": "https://github.com/ZennoZenith/api-railway",
+  "bugs": {
+    "url": "https://github.com/ZennoZenith/api-railway/issues"
   },
-  "directories": {
-    "lib": "lib"
-  },
+  "author": "ZennoZenith <> (https://zennozenith.com)",
   "repository": {
     "type": "git",
     "url": "git://github.com/ZennoZenith/api-railway.git"
+  },
+  "files": ["dist"],
+  "main": "dist/index.js",
+  "type": "module",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "ci": "bun run build"
   }
 }
