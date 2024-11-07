@@ -43,13 +43,6 @@ const trainInfoTypeObj: TrainInfo = {
   updatedAt: "",
 } as const;
 
-const trainGeneralTypeObj: TrainGeneralInfo = {
-  id: 0,
-  trainNumber: "",
-  trainName: "",
-  trainTypeCode: "ANT",
-} as const;
-
 test("getTrain", () => {
   const client = new Client();
 
@@ -77,7 +70,7 @@ test("getTrainsLikeNumber train number", () => {
         },
         body: undefined,
         method: "GET",
-        returnType: trainGeneralTypeObj,
+        returnType: [],
       },
     );
 });
@@ -95,7 +88,7 @@ test("getTrainsLikeNumber query", () => {
         },
         body: undefined,
         method: "GET",
-        returnType: trainGeneralTypeObj,
+        returnType: [],
       },
     );
 });
@@ -115,4 +108,4 @@ test("health check", () => {
     );
 });
 
-// TODO: write tests for other routes
+// // TODO: write tests for other routes

@@ -46,13 +46,11 @@ export type TrainsBetweenStations = {
 
 export default class TrainsBtwStations {
   private readonly baseUrl: string;
-  private readonly urlBuilder: URLBuilder<"trainsBtwStations", TrainsBetweenStations[]>;
+  private readonly headers: Record<string, string>;
 
   constructor(client: Client) {
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-    this.urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations[]>([], this.baseUrl).addResource(
-      "trainsBtwStations",
-    );
+    this.headers = client.headers;
   }
 
   getTrainsBtwStations(
@@ -64,7 +62,11 @@ export default class TrainsBtwStations {
     // TODO: Set date to current date
     options.date ??= "";
 
-    return this.urlBuilder.addQueryParam({ fromStation, toStation, date: options.date, allTrains: options.allTrains })
+    const urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations[]>([], this.baseUrl, this.headers)
+      .addResource(
+        "trainsBtwStations",
+      );
+    return urlBuilder.addQueryParam({ fromStation, toStation, date: options.date, allTrains: options.allTrains })
       .buildURL();
   }
 }

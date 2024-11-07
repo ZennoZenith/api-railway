@@ -19,15 +19,18 @@ export type ScheduleRow = {
 
 export default class Schedules {
   private readonly baseUrl: string;
-  private readonly urlBuilder: URLBuilder<"schedules", ScheduleRow[]>;
+  private readonly headers: Record<string, string>;
 
   constructor(client: Client) {
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-    this.urlBuilder = new URLBuilder<"schedules", ScheduleRow[]>([], this.baseUrl).addResource("schedules");
+    this.headers = client.headers;
   }
 
   getSchedule(trainNumber: TrainNumber, fullSchedule?: boolean): FetchOptions<ScheduleRow[]> {
     fullSchedule ??= false;
-    return this.urlBuilder.addResource(trainNumber).addQueryParam({ fullSchedule }).buildURL();
+    const urlBuilder = new URLBuilder<"schedules", ScheduleRow[]>([], this.baseUrl, this.headers).addResource(
+      "schedules",
+    );
+    return urlBuilder.addResource(trainNumber).addQueryParam({ fullSchedule }).buildURL();
   }
 }

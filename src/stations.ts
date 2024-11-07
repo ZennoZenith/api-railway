@@ -39,37 +39,41 @@ const stationInfoTypeObj: StationInfo = {
 
 export default class Stations {
   private readonly baseUrl: string;
-  private readonly stationUrlBuilder: URLBuilder<"stations", StationInfo>;
-  private readonly stationGeneralUrlBuilder: URLBuilder<"stations", StationGeneralInfo[]>;
+  private readonly headers: Record<string, string>;
 
   constructor(client: Client) {
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-
-    this.stationUrlBuilder = new URLBuilder<"stations", StationInfo>(stationInfoTypeObj, this.baseUrl).addResource(
-      "stations",
-    );
-
-    this.stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>([], this.baseUrl)
-      .addResource(
-        "stations",
-      );
+    this.headers = client.headers;
   }
 
   getStation(stationCode: StationCode): FetchOptions<StationInfo> {
-    return this.stationUrlBuilder.addResource(stationCode).buildURL();
+    const stationUrlBuilder = new URLBuilder<"stations", StationInfo>(stationInfoTypeObj, this.baseUrl, this.headers)
+      .addResource(
+        "stations",
+      );
+    return stationUrlBuilder.addResource(stationCode).buildURL();
   }
 
   getStationsLikeCode(
     stationCode: StationCode,
     limit: number = 10,
   ): FetchOptions<StationGeneralInfo[]> {
-    return this.stationGeneralUrlBuilder.addQueryParam({ stationCode, limit }).buildURL();
+    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>([], this.baseUrl, this.headers)
+      .addResource(
+        "stations",
+      );
+
+    return stationGeneralUrlBuilder.addQueryParam({ stationCode, limit }).buildURL();
   }
 
   getStationsLikeQuery(
     q: string,
     limit: number = 10,
   ): FetchOptions<StationGeneralInfo[]> {
-    return this.stationGeneralUrlBuilder.addQueryParam({ q, limit }).buildURL();
+    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>([], this.baseUrl, this.headers)
+      .addResource(
+        "stations",
+      );
+    return stationGeneralUrlBuilder.addQueryParam({ q, limit }).buildURL();
   }
 }

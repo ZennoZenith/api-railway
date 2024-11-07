@@ -92,37 +92,40 @@ const trainInfoTypeObj: TrainInfo = {
 
 export default class Trains {
   private readonly baseUrl: string;
-  private readonly trainUrlBuilder: URLBuilder<"trains", TrainInfo>;
-  private readonly trainLikeUrlBuilder: URLBuilder<"trains", TrainGeneralInfo[]>;
+  private readonly headers: Record<string, string>;
 
   constructor(client: Client) {
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-
-    this.trainUrlBuilder = new URLBuilder<"trains", TrainInfo>(trainInfoTypeObj, this.baseUrl, client.headers)
-      .addResource("trains");
-
-    this.trainLikeUrlBuilder = new URLBuilder<"trains", TrainGeneralInfo[]>(
-      [],
-      this.baseUrl,
-      client.headers,
-    ).addResource("trains");
+    this.headers = client.headers;
   }
 
   getTrain(trainNumber: TrainNumber): FetchOptions<TrainInfo> {
-    return this.trainUrlBuilder.addResource(trainNumber).buildURL();
+    const urlBuilder = new URLBuilder<"trains", TrainInfo>(trainInfoTypeObj, this.baseUrl, this.headers)
+      .addResource("trains");
+    return urlBuilder.addResource(trainNumber).buildURL();
   }
 
   getTrainsLikeNumber(
     trainNumber: string,
     limit: number = 10,
   ): FetchOptions<TrainGeneralInfo[]> {
-    return this.trainLikeUrlBuilder.addQueryParam({ trainNumber, limit }).buildURL();
+    const urlBuilder = new URLBuilder<"trains", TrainGeneralInfo[]>(
+      [],
+      this.baseUrl,
+      this.headers,
+    ).addResource("trains");
+    return urlBuilder.addQueryParam({ trainNumber, limit }).buildURL();
   }
 
   getTrainsLikeQuery(
     q: string,
     limit: number = 10,
   ): FetchOptions<TrainGeneralInfo[]> {
-    return this.trainLikeUrlBuilder.addQueryParam({ q, limit }).buildURL();
+    const urlBuilder = new URLBuilder<"trains", TrainGeneralInfo[]>(
+      [],
+      this.baseUrl,
+      this.headers,
+    ).addResource("trains");
+    return urlBuilder.addQueryParam({ q, limit }).buildURL();
   }
 }
