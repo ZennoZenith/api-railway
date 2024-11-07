@@ -1,7 +1,5 @@
 import { Client } from "./index.js";
 import type {
-  ApiError,
-  ApiResponse,
   StationCode,
   StationType,
   TimeString,
@@ -10,7 +8,7 @@ import type {
   TrainRunsOnDays,
   TrainTime,
 } from "./types.js";
-import { catchError, URLBuilder } from "./utils.js";
+import { type FetchOptions, URLBuilder } from "./utils.js";
 
 type ScheduleStation = {
   srNo: number;
@@ -47,49 +45,26 @@ export type TrainsBetweenStations = {
 };
 
 export default class TrainsBtwStations {
-  readonly #client: Client;
   private readonly baseUrl: string;
-  private readonly urlBuilder: URLBuilder<"trainsBtwStations">;
+  private readonly urlBuilder: URLBuilder<"trainsBtwStations", TrainsBetweenStations[]>;
 
   constructor(client: Client) {
-    this.#client = client;
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-    this.urlBuilder = new URLBuilder<"trainsBtwStations">(this.baseUrl).addResource("trainsBtwStations");
+    this.urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations[]>([], this.baseUrl).addResource(
+      "trainsBtwStations",
+    );
   }
 
-  async getTrainsBtwStations(
+  getTrainsBtwStations(
     fromStation: StationCode,
     toStation: StationCode,
     options: { allTrains?: boolean; date?: string } = {},
-  ): Promise<ApiResponse<TrainsBetweenStations[]>> {
+  ): FetchOptions<TrainsBetweenStations[]> {
     options.allTrains ??= false;
     // TODO: Set date to current date
     options.date ??= "";
 
-    let response = await catchError(
-      this.urlBuilder.addQueryParam({ fromStation, toStation, date: options.date, allTrains: options.allTrains }).fetch(
-        {
-          headers: {
-            "x-api-key": this.#client.apiKey,
-          },
-          method: "GET",
-        },
-      ),
-    );
-
-    if (response[0]) {
-      return { error: response[0], data: undefined, apiError: undefined };
-    }
-
-    let data = await catchError<TrainsBetweenStations[] | ApiError>(response[1].json());
-
-    if (data[0]) {
-      return { error: data[0], data: undefined, apiError: undefined };
-    }
-
-    if ((data[1] as ApiError).error) {
-      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
-    }
-    return { data: data[1] as TrainsBetweenStations[], apiError: undefined, error: undefined };
+    return this.urlBuilder.addQueryParam({ fromStation, toStation, date: options.date, allTrains: options.allTrains })
+      .buildURL();
   }
 }

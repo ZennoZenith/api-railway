@@ -1,6 +1,6 @@
 import { Client } from "./index.js";
-import type { ApiError, ApiResponse, StationCode, StationType, TimeString } from "./types.js";
-import { catchError, URLBuilder } from "./utils.js";
+import type { StationCode, StationType, TimeString } from "./types.js";
+import { type FetchOptions, URLBuilder } from "./utils.js";
 
 export type StationInfo = {
   id: number;
@@ -24,98 +24,52 @@ export type StationGeneralInfo = {
   stationType: StationType;
 };
 
+const stationInfoTypeObj: StationInfo = {
+  id: 0,
+  stationCode: "",
+  stationName: "",
+  stateName: "",
+  zoneCode: "",
+  stationAlternateText: "",
+  stationType: "unknown",
+  numberOfPlatforms: 0,
+  hindiStationName: "",
+  updatedAt: "",
+} as const;
+
 export default class Stations {
-  readonly #client: Client;
   private readonly baseUrl: string;
-  private readonly urlBuilder: URLBuilder<"stations">;
+  private readonly stationUrlBuilder: URLBuilder<"stations", StationInfo>;
+  private readonly stationGeneralUrlBuilder: URLBuilder<"stations", StationGeneralInfo[]>;
 
   constructor(client: Client) {
-    this.#client = client;
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-    this.urlBuilder = new URLBuilder<"stations">(this.baseUrl).addResource("stations");
-  }
 
-  async getStation(stationCode: StationCode): Promise<ApiResponse<StationInfo>> {
-    let response = await catchError(
-      this.urlBuilder.addResource(stationCode).fetch({
-        headers: {
-          "x-api-key": this.#client.apiKey,
-        },
-        method: "GET",
-      }),
+    this.stationUrlBuilder = new URLBuilder<"stations", StationInfo>(stationInfoTypeObj, this.baseUrl).addResource(
+      "stations",
     );
 
-    if (response[0]) {
-      return { error: response[0], data: undefined, apiError: undefined };
-    }
-
-    let data = await catchError<StationInfo | ApiError>(response[1].json());
-
-    if (data[0]) {
-      return { error: data[0], data: undefined, apiError: undefined };
-    }
-
-    if ((data[1] as ApiError).error) {
-      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
-    }
-    return { data: data[1] as StationInfo, apiError: undefined, error: undefined };
+    this.stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>([], this.baseUrl)
+      .addResource(
+        "stations",
+      );
   }
 
-  async getStationsLikeCode(
+  getStation(stationCode: StationCode): FetchOptions<StationInfo> {
+    return this.stationUrlBuilder.addResource(stationCode).buildURL();
+  }
+
+  getStationsLikeCode(
     stationCode: StationCode,
     limit: number = 10,
-  ): Promise<ApiResponse<StationGeneralInfo>> {
-    let response = await catchError(
-      this.urlBuilder.addQueryParam({ stationCode, limit }).fetch({
-        headers: {
-          "x-api-key": this.#client.apiKey,
-        },
-        method: "GET",
-      }),
-    );
-
-    if (response[0]) {
-      return { error: response[0], data: undefined, apiError: undefined };
-    }
-
-    const data = await catchError<StationGeneralInfo | ApiError>(response[1].json());
-    if (data[0]) {
-      return { error: data[0], data: undefined, apiError: undefined };
-    }
-
-    if ((data[1] as ApiError).error) {
-      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
-    }
-
-    return { data: data[1] as StationGeneralInfo, apiError: undefined, error: undefined };
+  ): FetchOptions<StationGeneralInfo[]> {
+    return this.stationGeneralUrlBuilder.addQueryParam({ stationCode, limit }).buildURL();
   }
 
-  async getStationsLikeQuery(
+  getStationsLikeQuery(
     q: string,
     limit: number = 10,
-  ): Promise<ApiResponse<StationGeneralInfo>> {
-    let response = await catchError(
-      this.urlBuilder.addQueryParam({ q, limit }).fetch({
-        headers: {
-          "x-api-key": this.#client.apiKey,
-        },
-        method: "GET",
-      }),
-    );
-
-    if (response[0]) {
-      return { error: response[0], data: undefined, apiError: undefined };
-    }
-
-    const data = await catchError<StationGeneralInfo | ApiError>(response[1].json());
-    if (data[0]) {
-      return { error: data[0], data: undefined, apiError: undefined };
-    }
-
-    if ((data[1] as ApiError).error) {
-      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
-    }
-
-    return { data: data[1] as StationGeneralInfo, apiError: undefined, error: undefined };
+  ): FetchOptions<StationGeneralInfo[]> {
+    return this.stationGeneralUrlBuilder.addQueryParam({ q, limit }).buildURL();
   }
 }

@@ -1,3 +1,4 @@
+export type HTTP_MEHTODS = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export type ApiError = {
   error: string;
   http_code: number;
@@ -14,20 +15,6 @@ export type TrainRunsOnDays = {
   thursday: boolean;
   friday: boolean;
   saturday: boolean;
-};
-
-export type ApiResponse<T> = {
-  error: undefined;
-  apiError: ApiError;
-  data: undefined;
-} | {
-  error: Error;
-  apiError: undefined;
-  data: undefined;
-} | {
-  error: undefined;
-  apiError: undefined;
-  data: T;
 };
 
 export interface LooseObject {

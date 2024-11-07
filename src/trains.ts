@@ -1,7 +1,5 @@
 import { Client } from "./index.js";
 import type {
-  ApiError,
-  ApiResponse,
   StationCode,
   StationType,
   TimeString,
@@ -11,7 +9,7 @@ import type {
   TrainTime,
   TrainTypeCode,
 } from "./types.js";
-import { catchError, URLBuilder } from "./utils.js";
+import { type FetchOptions, URLBuilder } from "./utils.js";
 
 export type TrainInfo = {
   id: number;
@@ -52,98 +50,79 @@ export type TrainGeneralInfo = {
   trainTypeCode: TrainTypeCode;
 };
 
+const trainInfoTypeObj: TrainInfo = {
+  id: 0,
+  trainNumber: "",
+  trainName: "",
+  trainFullName: "",
+  trainRunningDays: {
+    sunday: false,
+    monday: false,
+    tueday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+  },
+  availableClasses: [],
+  hasPantry: false,
+  trainTypeCode: "ANT",
+  returnTrainNumber: "",
+  stationFrom: {
+    id: 0,
+    stationCode: "",
+    stationName: "",
+    stationType: "unknown",
+  },
+  stationTo: {
+    id: 0,
+    stationCode: "",
+    stationName: "",
+    stationType: "unknown",
+  },
+  departureTime: "00:00:00",
+  arrivalTime: "00:00:00",
+  durationSec: 0,
+  distance: 0,
+  avgSpeed: 0,
+  numberOfStops: 0,
+  isActive: false,
+  updatedAt: "",
+} as const;
+
 export default class Trains {
-  readonly #client: Client;
   private readonly baseUrl: string;
-  private readonly urlBuilder: URLBuilder<"trains">;
+  private readonly trainUrlBuilder: URLBuilder<"trains", TrainInfo>;
+  private readonly trainLikeUrlBuilder: URLBuilder<"trains", TrainGeneralInfo[]>;
 
   constructor(client: Client) {
-    this.#client = client;
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-    this.urlBuilder = new URLBuilder<"trains">(this.baseUrl).addResource("trains");
+
+    this.trainUrlBuilder = new URLBuilder<"trains", TrainInfo>(trainInfoTypeObj, this.baseUrl, client.headers)
+      .addResource("trains");
+
+    this.trainLikeUrlBuilder = new URLBuilder<"trains", TrainGeneralInfo[]>(
+      [],
+      this.baseUrl,
+      client.headers,
+    ).addResource("trains");
   }
 
-  async getTrain(trainNumber: TrainNumber): Promise<ApiResponse<TrainInfo>> {
-    let response = await catchError(
-      this.urlBuilder.addResource(trainNumber).fetch({
-        headers: {
-          "x-api-key": this.#client.apiKey,
-        },
-        method: "GET",
-      }),
-    );
-
-    if (response[0]) {
-      return { error: response[0], data: undefined, apiError: undefined };
-    }
-
-    let data = await catchError<TrainInfo | ApiError>(response[1].json());
-
-    if (data[0]) {
-      return { error: data[0], data: undefined, apiError: undefined };
-    }
-
-    if ((data[1] as ApiError).error) {
-      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
-    }
-    return { data: data[1] as TrainInfo, apiError: undefined, error: undefined };
+  getTrain(trainNumber: TrainNumber): FetchOptions<TrainInfo> {
+    return this.trainUrlBuilder.addResource(trainNumber).buildURL();
   }
 
-  async getTrainsLikeNumber(
+  getTrainsLikeNumber(
     trainNumber: string,
     limit: number = 10,
-  ): Promise<ApiResponse<TrainGeneralInfo>> {
-    let response = await catchError(
-      this.urlBuilder.addQueryParam({ trainNumber, limit }).fetch({
-        headers: {
-          "x-api-key": this.#client.apiKey,
-        },
-        method: "GET",
-      }),
-    );
-
-    if (response[0]) {
-      return { error: response[0], data: undefined, apiError: undefined };
-    }
-
-    const data = await catchError<TrainGeneralInfo | ApiError>(response[1].json());
-    if (data[0]) {
-      return { error: data[0], data: undefined, apiError: undefined };
-    }
-
-    if ((data[1] as ApiError).error) {
-      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
-    }
-
-    return { data: data[1] as TrainGeneralInfo, apiError: undefined, error: undefined };
+  ): FetchOptions<TrainGeneralInfo[]> {
+    return this.trainLikeUrlBuilder.addQueryParam({ trainNumber, limit }).buildURL();
   }
 
-  async getTrainsLikeQuery(
+  getTrainsLikeQuery(
     q: string,
     limit: number = 10,
-  ): Promise<ApiResponse<TrainGeneralInfo>> {
-    let response = await catchError(
-      this.urlBuilder.addQueryParam({ q, limit }).fetch({
-        headers: {
-          "x-api-key": this.#client.apiKey,
-        },
-        method: "GET",
-      }),
-    );
-
-    if (response[0]) {
-      return { error: response[0], data: undefined, apiError: undefined };
-    }
-
-    const data = await catchError<TrainGeneralInfo | ApiError>(response[1].json());
-    if (data[0]) {
-      return { error: data[0], data: undefined, apiError: undefined };
-    }
-
-    if ((data[1] as ApiError).error) {
-      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
-    }
-
-    return { data: data[1] as TrainGeneralInfo, apiError: undefined, error: undefined };
+  ): FetchOptions<TrainGeneralInfo[]> {
+    return this.trainLikeUrlBuilder.addQueryParam({ q, limit }).buildURL();
   }
 }

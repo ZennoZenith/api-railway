@@ -1,6 +1,6 @@
 {
   "name": "api-railway",
-  "version": "0.2.0-alpha.2",
+  "version": "0.2.0-alpha.3",
   "description": "Api wrapper for api.railwayapi.site",
   "keywords": [
     "railway-api",
@@ -29,7 +29,12 @@
   },
   "scripts": {
     "build": "tsc",
-    "ci": "bun run build"
+    "test": "vitest run",
+    "dev": "vitest",
+    "ci": "bun run test && bun run build"
   },
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "vitest": "^2.1.4"
+  }
 }
