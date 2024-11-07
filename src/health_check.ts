@@ -19,7 +19,7 @@ export default class HealthCheck {
     );
 
     if (response[0]) {
-      return { error: response[0], data: undefined };
+      return { error: response[0], data: undefined, apiError: undefined };
     }
 
     if (response[1].status === 200) {

@@ -39,17 +39,17 @@ export default class Schedules {
     );
 
     if (response[0]) {
-      return { error: response[0], data: undefined };
+      return { error: response[0], data: undefined, apiError: undefined };
     }
 
     let data = await catchError<ScheduleRow[] | ApiError>(response[1].json());
 
     if (data[0]) {
-      return { error: data[0], data: undefined };
+      return { error: data[0], data: undefined, apiError: undefined };
     }
 
     if ((data[1] as ApiError).error) {
-      return { apiError: response[0], data: undefined };
+      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
     }
     return { data: data[1] as ScheduleRow[], apiError: undefined, error: undefined };
   }

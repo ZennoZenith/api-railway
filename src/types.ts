@@ -17,8 +17,12 @@ export type TrainRunsOnDays = {
 };
 
 export type ApiResponse<T> = {
-  error?: Error;
-  apiError?: ApiError;
+  error: undefined;
+  apiError: ApiError;
+  data: undefined;
+} | {
+  error: Error;
+  apiError: undefined;
   data: undefined;
 } | {
   error: undefined;

@@ -74,17 +74,17 @@ export default class Trains {
     );
 
     if (response[0]) {
-      return { error: response[0], data: undefined };
+      return { error: response[0], data: undefined, apiError: undefined };
     }
 
     let data = await catchError<TrainInfo | ApiError>(response[1].json());
 
     if (data[0]) {
-      return { error: data[0], data: undefined };
+      return { error: data[0], data: undefined, apiError: undefined };
     }
 
     if ((data[1] as ApiError).error) {
-      return { apiError: response[0], data: undefined };
+      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
     }
     return { data: data[1] as TrainInfo, apiError: undefined, error: undefined };
   }
@@ -103,16 +103,16 @@ export default class Trains {
     );
 
     if (response[0]) {
-      return { error: response[0], data: undefined };
+      return { error: response[0], data: undefined, apiError: undefined };
     }
 
     const data = await catchError<TrainGeneralInfo | ApiError>(response[1].json());
     if (data[0]) {
-      return { error: data[0], data: undefined };
+      return { error: data[0], data: undefined, apiError: undefined };
     }
 
     if ((data[1] as ApiError).error) {
-      return { apiError: data[0], data: undefined };
+      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
     }
 
     return { data: data[1] as TrainGeneralInfo, apiError: undefined, error: undefined };
@@ -132,16 +132,16 @@ export default class Trains {
     );
 
     if (response[0]) {
-      return { error: response[0], data: undefined };
+      return { error: response[0], data: undefined, apiError: undefined };
     }
 
     const data = await catchError<TrainGeneralInfo | ApiError>(response[1].json());
     if (data[0]) {
-      return { error: data[0], data: undefined };
+      return { error: data[0], data: undefined, apiError: undefined };
     }
 
     if ((data[1] as ApiError).error) {
-      return { apiError: data[0], data: undefined };
+      return { apiError: data[1] as ApiError, data: undefined, error: undefined };
     }
 
     return { data: data[1] as TrainGeneralInfo, apiError: undefined, error: undefined };
