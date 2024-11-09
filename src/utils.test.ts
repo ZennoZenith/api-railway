@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import type { TrainGeneralInfo, TrainInfo } from "./trains.js";
+import type { TrainInfo } from "./trains.js";
 import { Client } from "./utils.js";
 
 const BASE_URL = "api.railway.zennozenith.com";

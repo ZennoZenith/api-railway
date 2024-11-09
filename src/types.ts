@@ -1,8 +1,13 @@
+export type { ScheduleRow } from "./schedules.js";
+export type { StationGeneralInfo, StationInfo } from "./stations.js";
+export type { TrainGeneralInfo, TrainInfo } from "./trains.js";
+export type { TrainsBetweenStations } from "./trainsBtwStations.js";
+
 export type HTTP_MEHTODS = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export type ApiError = {
   error: string;
-  http_code: number;
-  error_code: number;
+  httpCode: number;
+  errorCode: number;
   title: string;
   href: string;
 };
