@@ -11,7 +11,7 @@ import type {
 import { type FetchOptions, URLBuilder } from "./utils.js";
 
 type ScheduleStation = {
-  srNo: number;
+  srNo: string;
   stationId: number;
   stationCode: string;
   stationName: string;
