@@ -4,7 +4,7 @@ import type { TimeString, TrainNumber, TrainTime } from "./types.js";
 import { type FetchOptions, URLBuilder } from "./utils.js";
 
 export type ScheduleRow = {
-  srNo: number;
+  srNo: string;
   station: StationGeneralInfo;
   arrivalTime: TrainTime;
   departureTime: TrainTime;
