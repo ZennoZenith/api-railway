@@ -1,7 +1,8 @@
 import { Client } from "./index.js";
 import type {
+  DateString,
   StationCode,
-  StationType,
+  StationGeneralInfo,
   TimeString,
   TrainClassTypeXX,
   TrainNumber,
@@ -13,9 +14,6 @@ import { type FetchOptions, URLBuilder } from "./utils.js";
 type ScheduleStation = {
   srNo: string;
   stationId: number;
-  stationCode: string;
-  stationName: string;
-  stationType: StationType;
   arrivalTime: TrainTime;
   departureTime: TrainTime;
   haltTimeSec: number;
@@ -28,6 +26,14 @@ type ScheduleStation = {
 };
 
 export type TrainsBetweenStations = {
+  stations: StationGeneralInfo[];
+  date: DateString;
+  flexible: boolean;
+  trainsOnDate: TrainsBetweenStationsTrains[];
+  trainsOnAlternateDate: TrainsBetweenStationsTrains[];
+};
+
+export type TrainsBetweenStationsTrains = {
   trainId: number;
   trainNumber: TrainNumber;
   trainName: string;
@@ -56,17 +62,24 @@ export default class TrainsBtwStations {
   getTrainsBtwStations(
     fromStation: StationCode,
     toStation: StationCode,
-    options: { allTrains?: boolean; date?: string } = {},
+    options: { allTrains?: boolean; date?: string; flexible?: boolean } = {},
   ): FetchOptions<TrainsBetweenStations[]> {
     options.allTrains ??= false;
-    // TODO: Set date to current date
-    options.date ??= "";
+    options.flexible ??= false;
+    // TODO: better date formate
+    options.date ??= (new Date()).toDateString().slice(0, 10);
 
     const urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations[]>([], this.baseUrl, this.headers)
       .addResource(
         "trainsBtwStations",
       );
-    return urlBuilder.addQueryParam({ fromStation, toStation, date: options.date, allTrains: options.allTrains })
+    return urlBuilder.addQueryParam({
+      fromStation,
+      toStation,
+      date: options.date,
+      allTrains: options.allTrains,
+      flexible: options.flexible,
+    })
       .buildURL();
   }
 }

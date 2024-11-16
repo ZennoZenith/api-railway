@@ -9,7 +9,13 @@ interface APIAttributes {
   trains: { trainNumber: TrainNumber; limit?: number } | { q: string; limit?: number };
   stations: { stationCode: StationCode; limit?: number } | { q: string; limit?: number };
   schedules: { fullSchedule: boolean };
-  trainsBtwStations: { fromStation: StationCode; toStation: StationCode; date?: string; allTrains?: boolean };
+  trainsBtwStations: {
+    fromStation: StationCode;
+    toStation: StationCode;
+    date?: string;
+    allTrains?: boolean;
+    flexible?: boolean;
+  };
   healthCheck: {};
 }
 

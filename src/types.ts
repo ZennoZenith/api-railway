@@ -27,6 +27,7 @@ export interface LooseObject {
 }
 
 export type TrainNumber = string;
+export type DateString = string;
 export type StationCode = string;
 export type TimeString = string;
 export type TrainTime = `${string}:${string}:${string}`;

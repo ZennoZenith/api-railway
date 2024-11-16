@@ -1,6 +1,6 @@
 {
   "name": "api-railway",
-  "version": "0.2.0-alpha.9",
+  "version": "0.2.0-alpha.10",
   "description": "Api wrapper for api.railwayapi.site",
   "keywords": [
     "railway-api",
@@ -35,6 +35,6 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.5"
   }
 }
