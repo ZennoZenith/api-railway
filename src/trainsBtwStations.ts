@@ -63,22 +63,26 @@ export default class TrainsBtwStations {
     fromStation: StationCode,
     toStation: StationCode,
     options: { allTrains?: boolean; date?: string; flexible?: boolean } = {},
-  ): FetchOptions<TrainsBetweenStations[]> {
-    options.allTrains ??= false;
-    options.flexible ??= false;
+  ): FetchOptions<TrainsBetweenStations> {
+    const flexible = options.flexible ?? false;
+    const allTrains = options.allTrains ?? false;
     // TODO: better date formate
-    options.date ??= (new Date()).toDateString().slice(0, 10);
+    const date = options.date ?? new Date().toDateString().slice(0, 10);
 
-    const urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations[]>([], this.baseUrl, this.headers)
+    const urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations>(
+      { date, flexible, stations: [], trainsOnAlternateDate: [], trainsOnDate: [] },
+      this.baseUrl,
+      this.headers,
+    )
       .addResource(
         "trainsBtwStations",
       );
     return urlBuilder.addQueryParam({
       fromStation,
       toStation,
-      date: options.date,
-      allTrains: options.allTrains,
-      flexible: options.flexible,
+      date,
+      flexible,
+      allTrains,
     })
       .buildURL();
   }
