@@ -1,5 +1,5 @@
 import { Client } from "./index.js";
-import { type FetchOptions, URLBuilder } from "./utils.js";
+import { URLBuilder } from "./utils.js";
 
 export default class HealthCheck {
   private readonly baseUrl: string;
@@ -7,10 +7,10 @@ export default class HealthCheck {
 
   constructor(client: Client) {
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-    this.urlBuilder = new URLBuilder<"healthCheck", {}>({}, this.baseUrl).addResource("health_check");
+    this.urlBuilder = new URLBuilder<"healthCheck", {}>(this.baseUrl).addResource("health_check");
   }
 
-  check(): FetchOptions<{}> {
+  check() {
     return this.urlBuilder.buildURL();
   }
 }

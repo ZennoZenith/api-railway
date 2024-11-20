@@ -29,13 +29,12 @@ interface SegmentTypes {
   trainsBtwStations: "trainsBtwStations";
 }
 
-export interface FetchOptions<T> {
+export interface FetchOptions {
   url: string;
   headers?: Record<string, string>;
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   params: Record<string, string>;
   body?: Record<string, any>;
-  returnType: T;
 }
 
 export class URLBuilder<T extends API, U> {
@@ -45,10 +44,8 @@ export class URLBuilder<T extends API, U> {
   private headers: Record<string, string>;
   private body?: Record<string, any>;
   private method: HTTP_MEHTODS;
-  private typeObject: U;
 
-  constructor(typeObject: U, baseURL: string, headers: Record<string, string> = {}) {
-    this.typeObject = typeObject;
+  constructor(baseURL: string, headers: Record<string, string> = {}) {
     this.headers = headers;
     this.baseURL = baseURL;
     this.method = "GET";
@@ -77,7 +74,7 @@ export class URLBuilder<T extends API, U> {
   }
 
   // Build the URL
-  buildURL(): FetchOptions<U> {
+  buildURL(): FetchOptions {
     let url = `${this.baseURL}/${this.segments.join("/")}`;
 
     if (this.queryParameters) {
@@ -97,7 +94,6 @@ export class URLBuilder<T extends API, U> {
       params: this.queryParameters || {},
       body: this.body,
       method: this.method,
-      returnType: this.typeObject,
     };
   }
 }

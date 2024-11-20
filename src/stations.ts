@@ -1,6 +1,6 @@
 import { Client } from "./index.js";
 import type { StationCode, StationType, TimeString } from "./types.js";
-import { type FetchOptions, URLBuilder } from "./utils.js";
+import { URLBuilder } from "./utils.js";
 
 export type StationInfo = {
   id: number;
@@ -24,19 +24,6 @@ export type StationGeneralInfo = {
   stationType: StationType;
 };
 
-const stationInfoTypeObj: StationInfo = {
-  id: 0,
-  stationCode: "",
-  stationName: "",
-  stateName: "",
-  zoneCode: "",
-  stationAlternateText: "",
-  stationType: "unknown",
-  numberOfPlatforms: 0,
-  hindiStationName: "",
-  updatedAt: "",
-} as const;
-
 export default class Stations {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
@@ -46,8 +33,8 @@ export default class Stations {
     this.headers = client.headers;
   }
 
-  getStation(stationCode: StationCode): FetchOptions<StationInfo> {
-    const stationUrlBuilder = new URLBuilder<"stations", StationInfo>(stationInfoTypeObj, this.baseUrl, this.headers)
+  getStation(stationCode: StationCode) {
+    const stationUrlBuilder = new URLBuilder<"stations", StationInfo>(this.baseUrl, this.headers)
       .addResource(
         "stations",
       );
@@ -57,8 +44,8 @@ export default class Stations {
   getStationsLikeCode(
     stationCode: StationCode,
     limit: number = 10,
-  ): FetchOptions<StationGeneralInfo[]> {
-    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>([], this.baseUrl, this.headers)
+  ) {
+    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>(this.baseUrl, this.headers)
       .addResource(
         "stations",
       );
@@ -69,8 +56,8 @@ export default class Stations {
   getStationsLikeQuery(
     q: string,
     limit: number = 10,
-  ): FetchOptions<StationGeneralInfo[]> {
-    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>([], this.baseUrl, this.headers)
+  ) {
+    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>(this.baseUrl, this.headers)
       .addResource(
         "stations",
       );

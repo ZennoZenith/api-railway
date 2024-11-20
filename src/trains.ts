@@ -9,7 +9,7 @@ import type {
   TrainTime,
   TrainTypeCode,
 } from "./types.js";
-import { type FetchOptions, URLBuilder } from "./utils.js";
+import { URLBuilder } from "./utils.js";
 
 export type TrainInfo = {
   id: number;
@@ -50,46 +50,6 @@ export type TrainGeneralInfo = {
   trainTypeCode: TrainTypeCode;
 };
 
-const trainInfoTypeObj: TrainInfo = {
-  id: 0,
-  trainNumber: "",
-  trainName: "",
-  trainFullName: "",
-  trainRunningDays: {
-    sunday: false,
-    monday: false,
-    tueday: false,
-    wednesday: false,
-    thursday: false,
-    friday: false,
-    saturday: false,
-  },
-  availableClasses: [],
-  hasPantry: false,
-  trainTypeCode: "ANT",
-  returnTrainNumber: "",
-  stationFrom: {
-    id: 0,
-    stationCode: "",
-    stationName: "",
-    stationType: "unknown",
-  },
-  stationTo: {
-    id: 0,
-    stationCode: "",
-    stationName: "",
-    stationType: "unknown",
-  },
-  departureTime: "00:00:00",
-  arrivalTime: "00:00:00",
-  durationSec: 0,
-  distance: 0,
-  avgSpeed: 0,
-  numberOfStops: 0,
-  isActive: false,
-  updatedAt: "",
-} as const;
-
 export default class Trains {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
@@ -99,8 +59,8 @@ export default class Trains {
     this.headers = client.headers;
   }
 
-  getTrain(trainNumber: TrainNumber): FetchOptions<TrainInfo> {
-    const urlBuilder = new URLBuilder<"trains", TrainInfo>(trainInfoTypeObj, this.baseUrl, this.headers)
+  getTrain(trainNumber: TrainNumber) {
+    const urlBuilder = new URLBuilder<"trains", TrainInfo>(this.baseUrl, this.headers)
       .addResource("trains");
     return urlBuilder.addResource(trainNumber).buildURL();
   }
@@ -108,9 +68,8 @@ export default class Trains {
   getTrainsLikeNumber(
     trainNumber: string,
     limit: number = 10,
-  ): FetchOptions<TrainGeneralInfo[]> {
+  ) {
     const urlBuilder = new URLBuilder<"trains", TrainGeneralInfo[]>(
-      [],
       this.baseUrl,
       this.headers,
     ).addResource("trains");
@@ -120,9 +79,8 @@ export default class Trains {
   getTrainsLikeQuery(
     q: string,
     limit: number = 10,
-  ): FetchOptions<TrainGeneralInfo[]> {
+  ) {
     const urlBuilder = new URLBuilder<"trains", TrainGeneralInfo[]>(
-      [],
       this.baseUrl,
       this.headers,
     ).addResource("trains");

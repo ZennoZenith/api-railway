@@ -9,7 +9,7 @@ import type {
   TrainRunsOnDays,
   TrainTime,
 } from "./types.js";
-import { type FetchOptions, URLBuilder } from "./utils.js";
+import { URLBuilder } from "./utils.js";
 
 type ScheduleStation = {
   srNo: string;
@@ -63,14 +63,13 @@ export default class TrainsBtwStations {
     fromStation: StationCode,
     toStation: StationCode,
     options: { allTrains?: boolean; date?: string; flexible?: boolean } = {},
-  ): FetchOptions<TrainsBetweenStations> {
+  ) {
     const flexible = options.flexible ?? false;
     const allTrains = options.allTrains ?? false;
     // TODO: better date formate
     const date = options.date ?? new Date().toDateString().slice(0, 10);
 
     const urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations>(
-      { date, flexible, stations: [], trainsOnAlternateDate: [], trainsOnDate: [] },
       this.baseUrl,
       this.headers,
     )

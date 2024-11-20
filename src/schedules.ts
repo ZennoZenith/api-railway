@@ -1,7 +1,7 @@
 import { Client } from "./index.js";
 import type { StationGeneralInfo } from "./stations.js";
 import type { TimeString, TrainNumber, TrainTime } from "./types.js";
-import { type FetchOptions, URLBuilder } from "./utils.js";
+import { URLBuilder } from "./utils.js";
 
 export type ScheduleRow = {
   srNo: string;
@@ -26,9 +26,9 @@ export default class Schedules {
     this.headers = client.headers;
   }
 
-  getSchedule(trainNumber: TrainNumber, fullSchedule?: boolean): FetchOptions<ScheduleRow[]> {
+  getSchedule(trainNumber: TrainNumber, fullSchedule?: boolean) {
     fullSchedule ??= false;
-    const urlBuilder = new URLBuilder<"schedules", ScheduleRow[]>([], this.baseUrl, this.headers).addResource(
+    const urlBuilder = new URLBuilder<"schedules", ScheduleRow[]>(this.baseUrl, this.headers).addResource(
       "schedules",
     );
     return urlBuilder.addResource(trainNumber).addQueryParam({ fullSchedule }).buildURL();

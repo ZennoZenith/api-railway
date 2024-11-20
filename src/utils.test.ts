@@ -1,48 +1,7 @@
 import { expect, test } from "vitest";
-import type { TrainInfo } from "./trains.js";
 import { Client } from "./utils.js";
 
 const BASE_URL = "api.railway.zennozenith.com";
-const trainInfoTypeObj: TrainInfo = {
-  id: 0,
-  trainNumber: "",
-  trainName: "",
-  trainFullName: "",
-  trainRunningDays: {
-    sunday: false,
-    monday: false,
-    tueday: false,
-    wednesday: false,
-    thursday: false,
-    friday: false,
-    saturday: false,
-  },
-  availableClasses: [],
-  hasPantry: false,
-  trainTypeCode: "ANT",
-  returnTrainNumber: "",
-  stationFrom: {
-    id: 0,
-    stationCode: "",
-    stationName: "",
-    stationType: "unknown",
-  },
-  stationTo: {
-    id: 0,
-    stationCode: "",
-    stationName: "",
-    stationType: "unknown",
-  },
-  departureTime: "00:00:00",
-  arrivalTime: "00:00:00",
-  durationSec: 0,
-  distance: 0,
-  avgSpeed: 0,
-  numberOfStops: 0,
-  isActive: false,
-  updatedAt: "",
-} as const;
-
 test("getTrain", () => {
   const client = new Client();
 
@@ -53,7 +12,6 @@ test("getTrain", () => {
       params: {},
       body: undefined,
       method: "GET",
-      returnType: trainInfoTypeObj,
     });
 });
 
@@ -70,7 +28,6 @@ test("getTrainsLikeNumber train number", () => {
         },
         body: undefined,
         method: "GET",
-        returnType: [],
       },
     );
 });
@@ -88,7 +45,6 @@ test("getTrainsLikeNumber query", () => {
         },
         body: undefined,
         method: "GET",
-        returnType: [],
       },
     );
 });
@@ -103,7 +59,6 @@ test("health check", () => {
         params: {},
         body: undefined,
         method: "GET",
-        returnType: {},
       },
     );
 });
