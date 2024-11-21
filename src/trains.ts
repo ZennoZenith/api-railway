@@ -1,54 +1,6 @@
 import { Client } from "./index.js";
-import type {
-  StationCode,
-  StationType,
-  TimeString,
-  TrainClassTypeXX,
-  TrainNumber,
-  TrainRunsOnDays,
-  TrainTime,
-  TrainTypeCode,
-} from "./types.js";
+import type { TrainGeneralInfo, TrainInfo, TrainNumber } from "./types.js";
 import { URLBuilder } from "./utils.js";
-
-export type TrainInfo = {
-  id: number;
-  trainNumber: string;
-  trainName: string;
-  trainFullName: string;
-  trainRunningDays: TrainRunsOnDays;
-  availableClasses: TrainClassTypeXX[];
-  hasPantry: boolean;
-  trainTypeCode: TrainTypeCode;
-  returnTrainNumber: string;
-  stationFrom: {
-    id: number;
-    stationCode: StationCode;
-    stationName: string;
-    stationType: StationType;
-  };
-  stationTo: {
-    id: number;
-    stationCode: StationCode;
-    stationName: string;
-    stationType: StationType;
-  };
-  departureTime: TrainTime;
-  arrivalTime: TrainTime;
-  durationSec: number;
-  distance: number;
-  avgSpeed: number;
-  numberOfStops: number;
-  isActive: boolean;
-  updatedAt: TimeString;
-};
-
-export type TrainGeneralInfo = {
-  id: number;
-  trainNumber: string;
-  trainName: string;
-  trainTypeCode: TrainTypeCode;
-};
 
 export default class Trains {
   private readonly baseUrl: string;

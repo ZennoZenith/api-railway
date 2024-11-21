@@ -1,21 +1,6 @@
 import { Client } from "./index.js";
-import type { StationGeneralInfo } from "./stations.js";
-import type { TimeString, TrainNumber, TrainTime } from "./types.js";
+import type { ScheduleRow, TrainNumber } from "./types.js";
 import { URLBuilder } from "./utils.js";
-
-export type ScheduleRow = {
-  srNo: string;
-  station: StationGeneralInfo;
-  arrivalTime: TrainTime;
-  departureTime: TrainTime;
-  haltTime: string;
-  platform: string;
-  dayCount: number;
-  distance: number;
-  speed: number;
-  boardingDisabled: boolean;
-  updatedAt: TimeString;
-};
 
 export default class Schedules {
   private readonly baseUrl: string;

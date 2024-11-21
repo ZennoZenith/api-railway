@@ -1,28 +1,6 @@
 import { Client } from "./index.js";
-import type { StationCode, StationType, TimeString } from "./types.js";
+import type { StationCode, StationGeneralInfo, StationInfo } from "./types.js";
 import { URLBuilder } from "./utils.js";
-
-export type StationInfo = {
-  id: number;
-  stationCode: StationCode;
-  stationName: string;
-  stateName: string;
-  zoneCode: string;
-  stationAlternateText: string;
-  stationType: StationType;
-  numberOfPlatforms: number;
-  hindiStationName: string;
-  latitude?: number;
-  longitude?: number;
-  updatedAt: TimeString;
-};
-
-export type StationGeneralInfo = {
-  id: number;
-  stationCode: StationCode;
-  stationName: string;
-  stationType: StationType;
-};
 
 export default class Stations {
   private readonly baseUrl: string;

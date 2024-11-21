@@ -1,6 +1,6 @@
 {
   "name": "api-railway",
-  "version": "0.2.0-alpha.12",
+  "version": "0.2.0-alpha.14",
   "description": "Api wrapper for api.railwayapi.site",
   "keywords": [
     "railway-api",
@@ -27,7 +27,7 @@
     "vitest": "^2.1.5"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist/ && tsc",
     "test": "vitest run",
     "format": "dprint fmt *",
     "check-format": "dprint check *",

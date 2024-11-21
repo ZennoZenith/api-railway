@@ -1,55 +1,6 @@
 import { Client } from "./index.js";
-import type {
-  DateString,
-  StationCode,
-  StationGeneralInfo,
-  TimeString,
-  TrainClassTypeXX,
-  TrainNumber,
-  TrainRunsOnDays,
-  TrainTime,
-} from "./types.js";
+import type { StationCode, TrainsBetweenStations } from "./types.js";
 import { URLBuilder } from "./utils.js";
-
-type ScheduleStation = {
-  srNo: string;
-  stationId: number;
-  arrivalTime: TrainTime;
-  departureTime: TrainTime;
-  haltTimeSec: number;
-  platform: string;
-  dayCount: number;
-  distance: number;
-  speed: number;
-  boardingDisabled: boolean;
-  updatedAt: TimeString;
-};
-
-export type TrainsBetweenStations = {
-  stations: StationGeneralInfo[];
-  date: DateString;
-  flexible: boolean;
-  trainsOnDate: TrainsBetweenStationsTrains[];
-  trainsOnAlternateDate: TrainsBetweenStationsTrains[];
-};
-
-export type TrainsBetweenStationsTrains = {
-  trainId: number;
-  trainNumber: TrainNumber;
-  trainName: string;
-  trainFullName: string;
-  trainRunningDays: TrainRunsOnDays;
-  availableClasses: TrainClassTypeXX[];
-  hasPantry: boolean;
-  trainTypeCode: string;
-  returnTrainNumber: string;
-  distance: number;
-  durationSec: number;
-  stationFrom: ScheduleStation;
-  stationTo: ScheduleStation;
-  updatedAt: TimeString;
-};
-
 export default class TrainsBtwStations {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
