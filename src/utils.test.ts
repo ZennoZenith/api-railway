@@ -5,28 +5,28 @@ const BASE_URL = "api.railway.zennozenith.com";
 test("getTrain", () => {
   const client = new Client();
 
-  expect(client.trains.getTrain("12650"))
+  expect(client.trains.getTrainParts("12650"))
     .toStrictEqual({
       url: `https://${BASE_URL}/v1/trains/12650`,
       headers: {},
       params: {},
-      body: undefined,
+      body: null,
       method: "GET",
     });
 });
 
 test("getTrainsLikeNumber train number", () => {
   const client = new Client();
-  expect(client.trains.getTrainsLikeNumber("12650"))
+  expect(client.trains.getTrainsLikeNumberParts("12650"))
     .toStrictEqual(
       {
-        url: "https://api.railway.zennozenith.com/v1/trains?trainNumber=12650&limit=10",
+        url: `https://${BASE_URL}/v1/trains?trainNumber=12650&limit=10`,
         headers: {},
         params: {
           trainNumber: "12650",
           limit: 10,
         },
-        body: undefined,
+        body: null,
         method: "GET",
       },
     );
@@ -34,16 +34,16 @@ test("getTrainsLikeNumber train number", () => {
 
 test("getTrainsLikeNumber query", () => {
   const client = new Client();
-  expect(client.trains.getTrainsLikeQuery("kir"))
+  expect(client.trains.getTrainsLikeQueryParts("kir"))
     .toStrictEqual(
       {
-        url: "https://api.railway.zennozenith.com/v1/trains?q=kir&limit=10",
+        url: `https://${BASE_URL}/v1/trains?q=kir&limit=10`,
         headers: {},
         params: {
           q: "kir",
           limit: 10,
         },
-        body: undefined,
+        body: null,
         method: "GET",
       },
     );
@@ -51,13 +51,13 @@ test("getTrainsLikeNumber query", () => {
 
 test("health check", () => {
   const client = new Client();
-  expect(client.healthCheck.check())
+  expect(client.healthCheck.checkParts())
     .toStrictEqual(
       {
-        url: "https://api.railway.zennozenith.com/v1/health_check",
+        url: `https://${BASE_URL}/v1/health_check`,
         headers: {},
         params: {},
-        body: undefined,
+        body: null,
         method: "GET",
       },
     );

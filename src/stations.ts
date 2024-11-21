@@ -11,7 +11,7 @@ export default class Stations {
     this.headers = client.headers;
   }
 
-  getStation(stationCode: StationCode) {
+  getStationParts(stationCode: StationCode) {
     const stationUrlBuilder = new URLBuilder<"stations", StationInfo>(this.baseUrl, this.headers)
       .addResource(
         "stations",
@@ -19,7 +19,15 @@ export default class Stations {
     return stationUrlBuilder.addResource(stationCode).buildURL();
   }
 
-  getStationsLikeCode(
+  async getStation(stationCode: StationCode) {
+    const stationUrlBuilder = new URLBuilder<"stations", StationInfo>(this.baseUrl, this.headers)
+      .addResource(
+        "stations",
+      );
+    return stationUrlBuilder.addResource(stationCode).fetch();
+  }
+
+  getStationsLikeCodeParts(
     stationCode: StationCode,
     limit: number = 10,
   ) {
@@ -31,7 +39,19 @@ export default class Stations {
     return stationGeneralUrlBuilder.addQueryParam({ stationCode, limit }).buildURL();
   }
 
-  getStationsLikeQuery(
+  async getStationsLikeCode(
+    stationCode: StationCode,
+    limit: number = 10,
+  ) {
+    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>(this.baseUrl, this.headers)
+      .addResource(
+        "stations",
+      );
+
+    return stationGeneralUrlBuilder.addQueryParam({ stationCode, limit }).fetch();
+  }
+
+  getStationsLikeQueryParts(
     q: string,
     limit: number = 10,
   ) {
@@ -40,5 +60,16 @@ export default class Stations {
         "stations",
       );
     return stationGeneralUrlBuilder.addQueryParam({ q, limit }).buildURL();
+  }
+
+  async getStationsLikeQuery(
+    q: string,
+    limit: number = 10,
+  ) {
+    const stationGeneralUrlBuilder = new URLBuilder<"stations", StationGeneralInfo[]>(this.baseUrl, this.headers)
+      .addResource(
+        "stations",
+      );
+    return stationGeneralUrlBuilder.addQueryParam({ q, limit }).fetch();
   }
 }

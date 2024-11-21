@@ -11,11 +11,19 @@ export default class Schedules {
     this.headers = client.headers;
   }
 
-  getSchedule(trainNumber: TrainNumber, fullSchedule?: boolean) {
+  getScheduleParts(trainNumber: TrainNumber, fullSchedule?: boolean) {
     fullSchedule ??= false;
     const urlBuilder = new URLBuilder<"schedules", ScheduleRow[]>(this.baseUrl, this.headers).addResource(
       "schedules",
     );
     return urlBuilder.addResource(trainNumber).addQueryParam({ fullSchedule }).buildURL();
+  }
+
+  async getSchedule(trainNumber: TrainNumber, fullSchedule?: boolean) {
+    fullSchedule ??= false;
+    const urlBuilder = new URLBuilder<"schedules", ScheduleRow[]>(this.baseUrl, this.headers).addResource(
+      "schedules",
+    );
+    return urlBuilder.addResource(trainNumber).addQueryParam({ fullSchedule }).fetch();
   }
 }

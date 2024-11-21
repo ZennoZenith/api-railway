@@ -10,7 +10,11 @@ export default class HealthCheck {
     this.urlBuilder = new URLBuilder<"healthCheck", {}>(this.baseUrl).addResource("health_check");
   }
 
-  check() {
+  checkParts() {
     return this.urlBuilder.buildURL();
+  }
+
+  async check() {
+    return this.urlBuilder.fetch<{ status: "OK" }>();
   }
 }

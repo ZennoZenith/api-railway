@@ -10,7 +10,7 @@ export default class TrainsBtwStations {
     this.headers = client.headers;
   }
 
-  getTrainsBtwStations(
+  getTrainsBtwStationsParts(
     fromStation: StationCode,
     toStation: StationCode,
     options: { allTrains?: boolean; date?: string; flexible?: boolean } = {},
@@ -35,5 +35,32 @@ export default class TrainsBtwStations {
       allTrains,
     })
       .buildURL();
+  }
+
+  async getTrainsBtwStations(
+    fromStation: StationCode,
+    toStation: StationCode,
+    options: { allTrains?: boolean; date?: string; flexible?: boolean } = {},
+  ) {
+    const flexible = options.flexible ?? false;
+    const allTrains = options.allTrains ?? false;
+    // TODO: better date formate
+    const date = options.date ?? new Date().toDateString().slice(0, 10);
+
+    const urlBuilder = new URLBuilder<"trainsBtwStations", TrainsBetweenStations>(
+      this.baseUrl,
+      this.headers,
+    )
+      .addResource(
+        "trainsBtwStations",
+      );
+    return urlBuilder.addQueryParam({
+      fromStation,
+      toStation,
+      date,
+      flexible,
+      allTrains,
+    })
+      .fetch();
   }
 }

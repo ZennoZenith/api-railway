@@ -5,7 +5,7 @@ import Trains from "./trains.js";
 import TrainsBtwStations from "./trainsBtwStations.js";
 import type { HTTP_MEHTODS, StationCode, TrainNumber } from "./types.js";
 
-interface APIAttributes {
+type APIAttributes = {
   trains: { trainNumber: TrainNumber; limit?: number } | { q: string; limit?: number };
   stations: { stationCode: StationCode; limit?: number } | { q: string; limit?: number };
   schedules: { fullSchedule: boolean };
@@ -17,24 +17,44 @@ interface APIAttributes {
     flexible?: boolean;
   };
   healthCheck: {};
-}
+};
 
 type API = keyof APIAttributes;
 
-interface SegmentTypes {
+type SegmentTypes = {
   healthCheck: "health_check";
   trains: "trains" | TrainNumber;
   stations: "stations" | StationCode;
   schedules: "schedules" | TrainNumber;
   trainsBtwStations: "trainsBtwStations";
-}
+};
 
-export interface FetchOptions {
+type FetchOptions = {
   url: string;
   headers?: Record<string, string>;
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   params: Record<string, string>;
-  body?: Record<string, any>;
+  body: BodyInit | null;
+};
+
+export async function catchError<T, E = Error>(promise: Promise<T>): Promise<[undefined, T] | [E]> {
+  try {
+    const data = await promise;
+    return [undefined, data] as [undefined, T];
+  } catch (error) {
+    return [error] as [E];
+  }
+}
+
+export async function fetchJson<T, E = Error>(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+): Promise<[undefined, T] | [E]> {
+  const errorRes = await catchError<any, E>(fetch(input, init));
+  if (errorRes[0]) {
+    return errorRes;
+  }
+  return await catchError<T, E>(errorRes[1].json());
 }
 
 export class URLBuilder<T extends API, U> {
@@ -42,13 +62,15 @@ export class URLBuilder<T extends API, U> {
   private segments: string[] = [];
   private queryParameters?: APIAttributes[T];
   private headers: Record<string, string>;
-  private body?: Record<string, any>;
+  private body: BodyInit | null;
+
   private method: HTTP_MEHTODS;
 
   constructor(baseURL: string, headers: Record<string, string> = {}) {
     this.headers = headers;
     this.baseURL = baseURL;
     this.method = "GET";
+    this.body = null;
   }
 
   // Add resource and query parameters
@@ -64,7 +86,7 @@ export class URLBuilder<T extends API, U> {
     this.headers[key] = value;
     return this;
   }
-  setBody(body: Record<string, any>): URLBuilder<T, U> {
+  setBody(body: BodyInit): URLBuilder<T, U> {
     this.body = body;
     return this;
   }
@@ -95,6 +117,28 @@ export class URLBuilder<T extends API, U> {
       body: this.body,
       method: this.method,
     };
+  }
+
+  async fetch<V>(requestInit?: RequestInit) {
+    let url = `${this.baseURL}/${this.segments.join("/")}`;
+
+    if (this.queryParameters) {
+      const queryParams = new URLSearchParams(
+        Object.entries(this.queryParameters).map(
+          ([key, value]) => [key, String(value)],
+        ),
+      ).toString();
+      if (queryParams) {
+        url += `?${queryParams}`;
+      }
+    }
+
+    return await fetchJson<V>(url, {
+      ...requestInit,
+      headers: this.headers,
+      method: this.method,
+      body: this.body,
+    });
   }
 }
 
