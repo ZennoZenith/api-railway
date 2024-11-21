@@ -119,7 +119,7 @@ export class URLBuilder<T extends API, U> {
     };
   }
 
-  async fetch<V>(requestInit?: RequestInit) {
+  async fetch(requestInit?: RequestInit) {
     let url = `${this.baseURL}/${this.segments.join("/")}`;
 
     if (this.queryParameters) {
@@ -133,7 +133,7 @@ export class URLBuilder<T extends API, U> {
       }
     }
 
-    return await fetchJson<V>(url, {
+    return await fetchJson<U>(url, {
       ...requestInit,
       headers: this.headers,
       method: this.method,

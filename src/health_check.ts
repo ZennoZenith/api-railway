@@ -7,7 +7,7 @@ export default class HealthCheck {
 
   constructor(client: Client) {
     this.baseUrl = `${client.protocol}://${client.baseUrl}/${client.apiVersion}`;
-    this.urlBuilder = new URLBuilder<"healthCheck", {}>(this.baseUrl).addResource("health_check");
+    this.urlBuilder = new URLBuilder<"healthCheck", { status: "OK" }>(this.baseUrl).addResource("health_check");
   }
 
   checkParts() {
@@ -15,6 +15,6 @@ export default class HealthCheck {
   }
 
   async check() {
-    return this.urlBuilder.fetch<{ status: "OK" }>();
+    return this.urlBuilder.fetch();
   }
 }
