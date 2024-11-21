@@ -3,7 +3,7 @@ import Schedules from "./schedules.js";
 import Stations from "./stations.js";
 import Trains from "./trains.js";
 import TrainsBtwStations from "./trainsBtwStations.js";
-import type { HTTP_MEHTODS, StationCode, TrainNumber } from "./types.js";
+import type { ApiError, HTTP_MEHTODS, StationCode, TrainNumber } from "./types.js";
 
 type APIAttributes = {
   trains: { trainNumber: TrainNumber; limit?: number } | { q: string; limit?: number };
@@ -133,7 +133,7 @@ export class URLBuilder<T extends API, U> {
       }
     }
 
-    return await fetchJson<U>(url, {
+    return await fetchJson<U | ApiError>(url, {
       ...requestInit,
       headers: this.headers,
       method: this.method,
